@@ -3,11 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configValidationSchema } from 'common/config/config.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env`],
+      validationSchema: configValidationSchema,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -23,11 +25,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         database: configService.get('DB_NAME'),
       }),
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   autoLoadEntities: true,
-    //   synchronize: true,
-    // }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -21,22 +21,4 @@ export class MoviesRepository extends Repository<Movie> {
     await this.save(movie);
     return movie;
   }
-
-  //   async findOne(id: number): Promise<Movie> {
-  //     return await this.findOne(id);
-  //   }
-
-  //   async update(id: number, movie: Movie): Promise<Movie> {
-  //     const updatedMovie = await this.findOne(id);
-  //     updatedMovie.title = movie.title;
-  //     updatedMovie.overview = movie.overview;
-  //     updatedMovie.poster = movie.poster;
-  //     updatedMovie.play_until = movie.play_until;
-  //     return await this.save(updatedMovie);
-  //   }
-
-  //   async remove(id: number): Promise<Movie> {
-  //     const movie = await this.findOne(id);
-  //     return await this.remove(movie);
-  //   }
 }

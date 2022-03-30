@@ -8,25 +8,12 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Movie {
+export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  title: string;
-
-  @Column({
-    type: 'text',
-  })
-  overview: string;
-
-  @Column()
-  poster: string;
-
-  @Column({
-    type: 'date',
-  })
-  play_until: Date;
+  name: string;
 
   @CreateDateColumn({
     type: 'timestamp',

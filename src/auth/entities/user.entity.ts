@@ -25,7 +25,7 @@ export class User {
   @Column()
   avatar: string;
 
-  @Column({ type: 'enum', enum: RoleEnum })
+  @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.User })
   role: RoleEnum;
 
   @CreateDateColumn({

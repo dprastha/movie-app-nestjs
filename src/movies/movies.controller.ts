@@ -6,12 +6,15 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('v1/movies')
+@UseGuards(AuthGuard())
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}
 

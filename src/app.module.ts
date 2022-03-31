@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from 'common/config/config.schema';
 import { MoviesModule } from './movies/movies.module';
 import { TagsModule } from './tags/tags.module';
+import { StudiosModule } from './studios/studios.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TagsModule } from './tags/tags.module';
     }),
     MoviesModule,
     TagsModule,
+    StudiosModule,
   ],
 })
 export class AppModule {}

@@ -8,6 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { RoleEnum } from 'common/enums/role.enum';
+import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
 
 export class SignUpDto {
   @IsNotEmpty()
@@ -16,6 +17,7 @@ export class SignUpDto {
 
   @IsNotEmpty()
   @IsEmail()
+  @IsUserAlreadyExist({ message: 'User with this email already exist' })
   email: string;
 
   @IsNotEmpty()

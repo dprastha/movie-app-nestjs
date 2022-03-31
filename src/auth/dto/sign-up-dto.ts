@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { RoleEnum } from 'common/enums/role.enum';
 
-export class AuthCredentialsDto {
+export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   name: string;

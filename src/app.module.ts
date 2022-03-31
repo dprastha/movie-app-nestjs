@@ -5,6 +5,7 @@ import { configValidationSchema } from 'common/config/config.schema';
 import { MoviesModule } from './movies/movies.module';
 import { TagsModule } from './tags/tags.module';
 import { StudiosModule } from './studios/studios.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { StudiosModule } from './studios/studios.module';
     MoviesModule,
     TagsModule,
     StudiosModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

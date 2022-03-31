@@ -6,12 +6,15 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { StudiosService } from './studios.service';
 import { CreateStudioDto } from './dto/create-studio.dto';
 import { UpdateStudioDto } from './dto/update-studio.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('v1/studios')
+@UseGuards(AuthGuard())
 export class StudiosController {
   constructor(private readonly studiosService: StudiosService) {}
 

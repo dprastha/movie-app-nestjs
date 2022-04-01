@@ -7,7 +7,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-import { RoleEnum } from 'common/enums/role.enum';
+import { RoleEnum } from 'src/common/enums/role.enum';
 import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
 
 export class SignUpDto {

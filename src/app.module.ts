@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { configValidationSchema } from 'common/config/config.schema';
+import { configValidationSchema } from 'src/common/config/config.schema';
 import { MoviesModule } from './movies/movies.module';
 import { TagsModule } from './tags/tags.module';
 import { StudiosModule } from './studios/studios.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from 'src/common/filters/http-exception.filters';
 
 @Module({
   imports: [
@@ -31,6 +33,12 @@ import { AuthModule } from './auth/auth.module';
     TagsModule,
     StudiosModule,
     AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
   ],
 })
 export class AppModule {}

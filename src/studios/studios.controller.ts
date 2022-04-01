@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { StudiosService } from './studios.service';
 import { CreateStudioDto } from './dto/create-studio.dto';
@@ -14,7 +15,7 @@ import { UpdateStudioDto } from './dto/update-studio.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { RoleEnum } from 'common/enums/role.enum';
+import { RoleEnum } from 'src/common/enums/role.enum';
 
 @Controller('v1/studios')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -33,19 +34,22 @@ export class StudiosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.studiosService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.studiosService.findOne(id);
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
-  update(@Param('id') id: number, @Body() updateStudioDto: UpdateStudioDto) {
-    return this.studiosService.update(+id, updateStudioDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateStudioDto: UpdateStudioDto,
+  ) {
+    return this.studiosService.update(id, updateStudioDto);
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id') id: number) {
-    return this.studiosService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.studiosService.remove(id);
   }
 }

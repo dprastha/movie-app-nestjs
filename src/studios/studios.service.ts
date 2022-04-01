@@ -31,11 +31,11 @@ export class StudiosService {
   }
 
   async update(id: number, updateStudioDto: UpdateStudioDto): Promise<Studio> {
-    const { studio_number, seat_capacity } = updateStudioDto;
+    const { studioNumber, seatCapacity } = updateStudioDto;
     const studio = await this.findOne(id);
 
-    studio.studio_number = studio_number;
-    studio.seat_capacity = seat_capacity;
+    studio.studioNumber = studioNumber;
+    studio.seatCapacity = seatCapacity;
 
     await this.studiosRepository.save(studio);
     return studio;

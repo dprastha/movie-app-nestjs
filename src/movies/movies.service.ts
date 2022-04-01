@@ -31,13 +31,13 @@ export class MoviesService {
   }
 
   async update(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
-    const { title, overview, poster, play_until } = updateMovieDto;
+    const { title, overview, poster, playUntil } = updateMovieDto;
     const movie = await this.findOne(id);
 
     movie.title = title;
     movie.overview = overview;
     movie.poster = poster;
-    movie.play_until = play_until;
+    movie.playUntil = playUntil;
 
     await this.moviesRepository.save(movie);
     return movie;

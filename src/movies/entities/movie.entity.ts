@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -26,18 +27,22 @@ export class Movie {
   @Column({
     type: 'date',
   })
-  play_until: Date;
+  @Expose({ name: 'play_until' })
+  playUntil: Date;
 
+  @Expose({ name: 'created_at' })
   @CreateDateColumn({
     type: 'timestamp',
   })
   createdAt: Date;
 
+  @Expose({ name: 'updated_at' })
   @UpdateDateColumn({
     type: 'timestamp',
   })
   updatedAt: Date;
 
+  @Expose({ name: 'deleted_at' })
   @DeleteDateColumn({
     type: 'timestamp',
     nullable: true,

@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class UpdateMovieDto {
@@ -15,5 +16,6 @@ export class UpdateMovieDto {
 
   @IsOptional()
   @IsDateString()
-  play_until: Date;
+  @Expose({ name: 'play_until' })
+  playUntil: Date;
 }

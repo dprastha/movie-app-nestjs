@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -12,22 +13,27 @@ export class Studio {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Expose({ name: 'studio_number' })
   @Column()
-  studio_number: number;
+  studioNumber: number;
 
+  @Expose({ name: 'seat_capacity' })
   @Column()
-  seat_capacity: number;
+  seatCapacity: number;
 
+  @Expose({ name: 'created_at' })
   @CreateDateColumn({
     type: 'timestamp',
   })
   createdAt: Date;
 
+  @Expose({ name: 'updated_at' })
   @UpdateDateColumn({
     type: 'timestamp',
   })
   updatedAt: Date;
 
+  @Expose({ name: 'deleted_at' })
   @DeleteDateColumn({
     type: 'timestamp',
     nullable: true,

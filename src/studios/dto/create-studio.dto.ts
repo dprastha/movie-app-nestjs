@@ -1,11 +1,14 @@
+import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateStudioDto {
+  @Expose({ name: 'studio_number' })
   @IsNotEmpty()
   @IsNumber()
-  studio_number: number;
+  studioNumber: number;
 
+  @Expose({ name: 'seat_capacity' })
   @IsNotEmpty()
   @IsNumber()
-  seat_capacity: number;
+  seatCapacity: number;
 }

@@ -9,13 +9,13 @@ export class MoviesRepository extends Repository<Movie> {
   }
 
   async createMovie(createMovieDto: CreateMovieDto): Promise<Movie> {
-    const { title, overview, poster, play_until } = createMovieDto;
+    const { title, overview, poster, playUntil } = createMovieDto;
 
     const movie = this.create({
       title,
       overview,
       poster,
-      play_until,
+      playUntil,
     });
 
     await this.save(movie);

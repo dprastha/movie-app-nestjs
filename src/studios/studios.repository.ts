@@ -9,11 +9,11 @@ export class StudiosRepository extends Repository<Studio> {
   }
 
   async createStudio(createStudioDto: CreateStudioDto): Promise<Studio> {
-    const { studio_number, seat_capacity } = createStudioDto;
+    const { studioNumber, seatCapacity } = createStudioDto;
 
     const studio = this.create({
-      studio_number,
-      seat_capacity,
+      studioNumber,
+      seatCapacity,
     });
 
     await this.save(studio);

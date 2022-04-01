@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMovieDto {
@@ -13,7 +14,8 @@ export class CreateMovieDto {
   @IsString()
   poster: string;
 
+  @Expose({ name: 'play_until' })
   @IsNotEmpty()
   @IsDateString()
-  play_until: Date;
+  playUntil: Date;
 }

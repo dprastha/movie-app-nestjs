@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import {
   Column,
@@ -28,16 +29,19 @@ export class User {
   @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.User })
   role: RoleEnum;
 
+  @Expose({ name: 'created_at' })
   @CreateDateColumn({
     type: 'timestamp',
   })
   createdAt: Date;
 
+  @Expose({ name: 'updated_at' })
   @UpdateDateColumn({
     type: 'timestamp',
   })
   updatedAt: Date;
 
+  @Expose({ name: 'deleted_at' })
   @DeleteDateColumn({
     type: 'timestamp',
     nullable: true,

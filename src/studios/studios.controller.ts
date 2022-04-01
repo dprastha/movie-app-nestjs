@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { StudiosService } from './studios.service';
 import { CreateStudioDto } from './dto/create-studio.dto';
@@ -33,19 +34,22 @@ export class StudiosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.studiosService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.studiosService.findOne(id);
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
-  update(@Param('id') id: number, @Body() updateStudioDto: UpdateStudioDto) {
-    return this.studiosService.update(+id, updateStudioDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateStudioDto: UpdateStudioDto,
+  ) {
+    return this.studiosService.update(id, updateStudioDto);
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id') id: number) {
-    return this.studiosService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.studiosService.remove(id);
   }
 }

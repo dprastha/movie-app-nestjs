@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -33,19 +34,22 @@ export class MoviesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.moviesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.moviesService.findOne(id);
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
-  update(@Param('id') id: number, @Body() updateMovieDto: UpdateMovieDto) {
-    return this.moviesService.update(+id, updateMovieDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateMovieDto: UpdateMovieDto,
+  ) {
+    return this.moviesService.update(id, updateMovieDto);
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id') id: number) {
-    return this.moviesService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.moviesService.remove(id);
   }
 }

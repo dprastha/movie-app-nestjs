@@ -13,6 +13,7 @@ import { MovieTagsModule } from './movie_tags/movie_tags.module';
 import { OrdersModule } from './orders/orders.module';
 import { UsersModule } from './users/users.module';
 import { MovieSchedulesModule } from './movie-schedules/movie-schedules.module';
+import { OrderItemsModule } from './order-items/order-items.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { MovieSchedulesModule } from './movie-schedules/movie-schedules.module';
     OrdersModule,
     UsersModule,
     MovieSchedulesModule,
+    OrderItemsModule,
   ],
   providers: [
     {

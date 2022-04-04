@@ -22,7 +22,7 @@ export class OrdersService {
 
   async findOne(id: number): Promise<Order> {
     const found = await this.ordersRepository.findOne(id, {
-      relations: ['user'],
+      relations: ['user', 'orderItems'],
     });
 
     if (!found) {

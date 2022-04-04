@@ -5,6 +5,8 @@ import { User } from 'src/users/entities/user.entity';
 
 export class UpdateOrderDto {
   @IsOptional()
+  @IsNumber()
+  @Expose({ name: 'user_id' })
   user: User;
 
   @IsOptional()

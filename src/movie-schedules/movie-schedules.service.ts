@@ -26,7 +26,7 @@ export class MovieSchedulesService {
 
   async findOne(id: number): Promise<MovieSchedule> {
     const found = await this.movieSchedulesRepository.findOne(id, {
-      relations: ['movie', 'studio'],
+      relations: ['movie', 'studio', 'orderItems'],
     });
 
     if (!found) {

@@ -7,7 +7,8 @@ export class MovieSchedulesRepository extends Repository<MovieSchedule> {
   async getMovieSchedules(): Promise<MovieSchedule[]> {
     const query = this.createQueryBuilder('movieSchedule')
       .leftJoinAndSelect('movieSchedule.movie', 'movie')
-      .leftJoinAndSelect('movieSchedule.studio', 'studio');
+      .leftJoinAndSelect('movieSchedule.studio', 'studio')
+      .leftJoinAndSelect('movieSchedule.orderItems', 'orderItem');
 
     const movies = await query.getMany();
     return movies;

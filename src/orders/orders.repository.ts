@@ -5,10 +5,9 @@ import { Order } from './entities/order.entity';
 @EntityRepository(Order)
 export class OrdersRepository extends Repository<Order> {
   async getOrders(): Promise<Order[]> {
-    const query = this.createQueryBuilder('order').leftJoinAndSelect(
-      'order.user',
-      'user',
-    );
+    const query = this.createQueryBuilder('order')
+      .leftJoinAndSelect('order.user', 'user')
+      .leftJoinAndSelect('order.orderItems', 'orderItem');
 
     const orders = await query.getMany();
     return orders;

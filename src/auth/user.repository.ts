@@ -4,8 +4,8 @@ import {
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { SignUpDto } from './dto/sign-up-dto';
-import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/users/entities/user.entity';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

@@ -14,9 +14,11 @@ import { OrdersModule } from './orders/orders.module';
 import { UsersModule } from './users/users.module';
 import { MovieSchedulesModule } from './movie-schedules/movie-schedules.module';
 import { OrderItemsModule } from './order-items/order-items.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: [`.env`],
       validationSchema: configValidationSchema,

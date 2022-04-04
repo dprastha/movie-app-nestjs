@@ -61,4 +61,9 @@ export class MoviesController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.moviesService.remove(id);
   }
+
+  @Get('/showing-movie')
+  findShowingMovie() {
+    return this.moviesService.showingMovie();
+  }
 }

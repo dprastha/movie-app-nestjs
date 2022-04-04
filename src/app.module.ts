@@ -10,6 +10,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filters';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { MovieTagsModule } from './movie_tags/movie_tags.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { MovieTagsModule } from './movie_tags/movie_tags.module';
     StudiosModule,
     AuthModule,
     MovieTagsModule,
+    OrdersModule,
   ],
   providers: [
     {

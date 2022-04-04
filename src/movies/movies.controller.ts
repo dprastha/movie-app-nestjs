@@ -8,6 +8,8 @@ import {
   Put,
   UseGuards,
   ParseIntPipe,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -16,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('v1/movies')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -28,8 +31,12 @@ export class MoviesController {
   }
 
   @Post()
+  @UseInterceptors(FileInterceptor('poster', { dest: './uploads/posters' }))
   @Roles(RoleEnum.Admin)
-  create(@Body() createMovieDto: CreateMovieDto) {
+  create(
+    @Body() createMovieDto: CreateMovieDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return this.moviesService.create(createMovieDto);
   }
 
@@ -39,10 +46,12 @@ export class MoviesController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('poster', { dest: './uploads/posters' }))
   @Roles(RoleEnum.Admin)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMovieDto: UpdateMovieDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     return this.moviesService.update(id, updateMovieDto);
   }

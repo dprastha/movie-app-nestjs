@@ -21,7 +21,9 @@ export class MoviesService {
   }
 
   async findOne(id: number): Promise<Movie> {
-    const found = await this.moviesRepository.findOne({ where: { id } });
+    const found = await this.moviesRepository.findOne(id, {
+      relations: ['movieTags'],
+    });
 
     if (!found) {
       throw new NotFoundException(`Movie with ID "${id}" not found`);
@@ -33,6 +35,10 @@ export class MoviesService {
   async update(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     const { title, overview, poster, playUntil } = updateMovieDto;
     const movie = await this.findOne(id);
+
+    if (!movie) {
+      throw new NotFoundException(`Movie with ID "${id}" not found`);
+    }
 
     movie.title = title;
     movie.overview = overview;

@@ -10,7 +10,7 @@ import {
 
 @Entity()
 export class Studio {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Expose({ name: 'studio_number' })

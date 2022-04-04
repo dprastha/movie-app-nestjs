@@ -1,28 +1,32 @@
 import { Expose } from 'class-transformer';
-import { MovieTag } from 'src/movie_tags/entities/movie_tag.entity';
+import { Movie } from 'src/movies/entities/movie.entity';
+import { Tag } from 'src/tags/entities/tag.entity';
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Tag {
+export class MovieTag {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
-  name: string;
-
-  @OneToMany(() => MovieTag, (movieTag) => movieTag.tag, {
+  @ManyToOne(() => Movie, (movie) => movie.movieTags, {
     onDelete: 'CASCADE',
   })
-  @Expose({ name: 'movie_tags' })
-  movieTags: MovieTag[];
+  @JoinColumn({ name: 'movie_id' })
+  movie: Movie;
+
+  @ManyToOne(() => Tag, (tag) => tag.movieTags, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'tag_id' })
+  tag: Tag;
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

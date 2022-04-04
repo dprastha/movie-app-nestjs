@@ -1,16 +1,18 @@
 import { Expose } from 'class-transformer';
+import { MovieTag } from 'src/movie_tags/entities/movie_tag.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class Movie {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column()
@@ -29,6 +31,12 @@ export class Movie {
   })
   @Expose({ name: 'play_until' })
   playUntil: Date;
+
+  @OneToMany(() => MovieTag, (movieTag) => movieTag.movie, {
+    onDelete: 'CASCADE',
+  })
+  @Expose({ name: 'movie_tags' })
+  movieTags: MovieTag[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

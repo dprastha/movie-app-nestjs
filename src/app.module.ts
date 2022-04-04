@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filters';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { MovieTagsModule } from './movie_tags/movie_tags.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
     TagsModule,
     StudiosModule,
     AuthModule,
+    MovieTagsModule,
   ],
   providers: [
     {

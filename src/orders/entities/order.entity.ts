@@ -1,10 +1,13 @@
 import { Expose } from 'class-transformer';
+import { User } from 'src/auth/entities/user.entity';
 import { PaymentMethodEnum } from 'src/common/enums/paymentMethod.enum';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +16,12 @@ import {
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => User, (user) => user.orders, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({ type: 'enum', enum: PaymentMethodEnum })
   @Expose({ name: 'payment_method' })

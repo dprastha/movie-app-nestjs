@@ -5,12 +5,19 @@ import { Order } from './entities/order.entity';
 @EntityRepository(Order)
 export class OrdersRepository extends Repository<Order> {
   async getOrders(): Promise<Order[]> {
-    return await this.find();
+    const query = this.createQueryBuilder('order').leftJoinAndSelect(
+      'order.user',
+      'user',
+    );
+
+    const orders = await query.getMany();
+    return orders;
   }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
-    const { paymentMethod, totalItemPrice } = createOrderDto;
+    const { user, paymentMethod, totalItemPrice } = createOrderDto;
     const order = this.create({
+      user,
       paymentMethod,
       totalItemPrice,
     });

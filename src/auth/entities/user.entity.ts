@@ -1,10 +1,12 @@
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { RoleEnum } from 'src/common/enums/role.enum';
+import { Order } from 'src/orders/entities/order.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 
@@ -28,6 +31,11 @@ export class User {
 
   @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.User })
   role: RoleEnum;
+
+  @OneToMany(() => Order, (order) => order.user, {
+    onDelete: 'CASCADE',
+  })
+  orders: Order[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

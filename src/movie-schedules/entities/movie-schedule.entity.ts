@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { Movie } from 'src/movies/entities/movie.entity';
+import { OrderItem } from 'src/order-items/entities/order-item.entity';
 import { Studio } from 'src/studios/entities/studio.entity';
 import {
   Column,
@@ -8,6 +9,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,6 +44,11 @@ export class MovieSchedule {
 
   @Column({ type: 'date' })
   date: Date;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.movieSchedule, {
+    onDelete: 'CASCADE',
+  })
+  orderItems: OrderItem[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

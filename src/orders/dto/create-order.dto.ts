@@ -5,6 +5,8 @@ import { User } from 'src/users/entities/user.entity';
 
 export class CreateOrderDto {
   @IsNotEmpty()
+  @IsNumber()
+  @Expose({ name: 'user_id' })
   user: User;
 
   @IsNotEmpty()

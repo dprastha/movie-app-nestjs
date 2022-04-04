@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { PaymentMethodEnum } from 'src/common/enums/paymentMethod.enum';
+import { OrderItem } from 'src/order-items/entities/order-item.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -8,6 +9,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,6 +32,11 @@ export class Order {
   @Column()
   @Expose({ name: 'total_item_price' })
   totalItemPrice: number;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
+    onDelete: 'CASCADE',
+  })
+  orderItems: OrderItem[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

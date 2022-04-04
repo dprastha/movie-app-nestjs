@@ -10,7 +10,7 @@ import {
 
 @Entity()
 export class Tag {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column()

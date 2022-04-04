@@ -10,7 +10,7 @@ import {
 
 @Entity()
 export class Movie {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column()

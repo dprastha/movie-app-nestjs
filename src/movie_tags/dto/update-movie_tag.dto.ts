@@ -1,8 +1,13 @@
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
+import { Movie } from 'src/movies/entities/movie.entity';
+import { Tag } from 'src/tags/entities/tag.entity';
 
 export class UpdateMovieTagDto {
   @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  tag: string;
+  @IsNumber()
+  movie: Movie;
+
+  @IsOptional()
+  @IsNumber()
+  tag: Tag;
 }

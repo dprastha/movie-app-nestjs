@@ -5,7 +5,13 @@ import { Movie } from './entities/movie.entity';
 @EntityRepository(Movie)
 export class MoviesRepository extends Repository<Movie> {
   async getMovies(): Promise<Movie[]> {
-    return await this.find();
+    const query = this.createQueryBuilder('movie').leftJoinAndSelect(
+      'movie.movieTags',
+      'movie_tag',
+    );
+
+    const movies = await query.getMany();
+    return movies;
   }
 
   async createMovie(createMovieDto: CreateMovieDto): Promise<Movie> {

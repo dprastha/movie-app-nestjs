@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -33,15 +32,11 @@ export class Movie {
   @Expose({ name: 'play_until' })
   playUntil: Date;
 
-  // @OneToMany(() => MovieTag, (movieTag) => movieTag.movie, {
-  //   onDelete: 'CASCADE',
-  // })
-  // movies: MovieTag[];
-
-  // @ManyToOne(() => MovieTag, (movieTag) => movieTag.movies, {
-  //   onDelete: 'CASCADE',
-  // })
-  // movieTag: MovieTag;
+  @OneToMany(() => MovieTag, (movieTag) => movieTag.movie, {
+    onDelete: 'CASCADE',
+  })
+  @Expose({ name: 'movie_tags' })
+  movieTags: MovieTag[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

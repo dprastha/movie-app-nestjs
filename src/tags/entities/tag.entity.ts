@@ -1,9 +1,11 @@
 import { Expose } from 'class-transformer';
+import { MovieTag } from 'src/movie_tags/entities/movie_tag.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -15,6 +17,12 @@ export class Tag {
 
   @Column()
   name: string;
+
+  @OneToMany(() => MovieTag, (movieTag) => movieTag.tag, {
+    onDelete: 'CASCADE',
+  })
+  @Expose({ name: 'movie_tags' })
+  movieTags: MovieTag[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

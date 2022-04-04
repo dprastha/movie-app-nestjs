@@ -5,15 +5,21 @@ import { MovieTag } from './entities/movie_tag.entity';
 @EntityRepository(MovieTag)
 export class MovieTagsRepository extends Repository<MovieTag> {
   async getMovieTags(): Promise<MovieTag[]> {
-    return await this.find();
+    const query = this.createQueryBuilder('movie_tag')
+      .leftJoinAndSelect('movie_tag.movie', 'movie')
+      .leftJoinAndSelect('movie_tag.tag', 'tag');
+
+    const movieTags = await query.getMany();
+    return movieTags;
   }
 
   async createMovieTag(
     createMovieTagDto: CreateMovieTagDto,
   ): Promise<MovieTag> {
-    const { tag } = createMovieTagDto;
+    const { movie, tag } = createMovieTagDto;
 
     const movieTag = this.create({
+      movie,
       tag,
     });
 

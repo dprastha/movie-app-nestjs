@@ -25,7 +25,9 @@ export class TagsService {
   }
 
   async findOne(id: number): Promise<Tag> {
-    const found = this.tagRepository.findOne({ where: { id } });
+    const found = this.tagRepository.findOne(id, {
+      relations: ['movieTags'],
+    });
 
     if (!found) {
       throw new NotFoundException(`Tag with ID "${id}" not found`);
@@ -37,6 +39,10 @@ export class TagsService {
   async update(id: number, updateTagDto: UpdateTagDto): Promise<Tag> {
     const { name } = updateTagDto;
     const tag = await this.findOne(id);
+
+    if (!tag) {
+      throw new NotFoundException(`Tag with ID "${id}" not found`);
+    }
 
     tag.name = name;
 

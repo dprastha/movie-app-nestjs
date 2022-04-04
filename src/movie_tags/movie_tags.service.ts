@@ -21,7 +21,9 @@ export class MovieTagsService {
   }
 
   async findOne(id: number): Promise<MovieTag> {
-    const found = this.movieTagsRepository.findOne(id);
+    const found = this.movieTagsRepository.findOne(id, {
+      relations: ['movie', 'tag'],
+    });
 
     if (!found) {
       throw new NotFoundException(`MovieTag with ID "${id}" not found`);
@@ -36,6 +38,10 @@ export class MovieTagsService {
   ): Promise<MovieTag> {
     const { tag } = updateMovieTagDto;
     const movieTag = await this.findOne(id);
+
+    if (!movieTag) {
+      throw new NotFoundException(`MovieTag with ID "${id}" not found`);
+    }
 
     movieTag.tag = tag;
 

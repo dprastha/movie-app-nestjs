@@ -5,15 +5,12 @@ import { MovieSchedule } from './entities/movie-schedule.entity';
 @EntityRepository(MovieSchedule)
 export class MovieSchedulesRepository extends Repository<MovieSchedule> {
   async getMovieSchedules(): Promise<MovieSchedule[]> {
-    // const query = this.createQueryBuilder('movie').leftJoinAndSelect(
-    //   'movie.movie',
-    //   'movie',
-    // );
+    const query = this.createQueryBuilder('movieSchedule')
+      .leftJoinAndSelect('movieSchedule.movie', 'movie')
+      .leftJoinAndSelect('movieSchedule.studio', 'studio');
 
-    // const movies = await query.getMany();
-    // return movies;
-
-    return this.find();
+    const movies = await query.getMany();
+    return movies;
   }
 
   async createMovieSchedules(

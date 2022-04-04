@@ -21,7 +21,9 @@ export class StudiosService {
   }
 
   async findOne(id: number): Promise<Studio> {
-    const found = await this.studiosRepository.findOne({ where: { id } });
+    const found = await this.studiosRepository.findOne(id, {
+      relations: ['movieSchedules'],
+    });
 
     if (!found) {
       throw new NotFoundException(`Movie with ID "${id}" not found`);

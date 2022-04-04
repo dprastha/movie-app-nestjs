@@ -1,9 +1,11 @@
 import { Expose } from 'class-transformer';
+import { MovieSchedule } from 'src/movie-schedules/entities/movie-schedule.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,12 @@ export class Studio {
   @Expose({ name: 'seat_capacity' })
   @Column()
   seatCapacity: number;
+
+  @OneToMany(() => MovieSchedule, (movieSchedule) => movieSchedule.studio, {
+    onDelete: 'CASCADE',
+  })
+  @Expose({ name: 'movie_schedules' })
+  movieSchedules: MovieSchedule[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

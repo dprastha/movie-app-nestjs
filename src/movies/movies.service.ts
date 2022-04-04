@@ -22,7 +22,7 @@ export class MoviesService {
 
   async findOne(id: number): Promise<Movie> {
     const found = await this.moviesRepository.findOne(id, {
-      relations: ['movieTags'],
+      relations: ['movieTags', 'movieSchedules'],
     });
 
     if (!found) {

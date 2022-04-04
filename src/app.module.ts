@@ -11,6 +11,7 @@ import { HttpExceptionFilter } from 'src/common/filters/http-exception.filters';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { MovieTagsModule } from './movie_tags/movie_tags.module';
 import { OrdersModule } from './orders/orders.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { OrdersModule } from './orders/orders.module';
     AuthModule,
     MovieTagsModule,
     OrdersModule,
+    UsersModule,
   ],
   providers: [
     {

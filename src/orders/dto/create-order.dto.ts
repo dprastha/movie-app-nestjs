@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
-import { User } from 'src/auth/entities/user.entity';
 import { PaymentMethodEnum } from 'src/common/enums/paymentMethod.enum';
+import { User } from 'src/users/entities/user.entity';
 
 export class CreateOrderDto {
   @IsNotEmpty()

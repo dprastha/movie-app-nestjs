@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, MoreThan, Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { Movie } from './entities/movie.entity';
 
@@ -25,5 +25,15 @@ export class MoviesRepository extends Repository<Movie> {
 
     await this.save(movie);
     return movie;
+  }
+
+  async getShowingMovie(): Promise<Movie[]> {
+    const todayDate = new Date().toISOString().slice(0, 10);
+
+    return this.find({
+      where: {
+        playUntil: MoreThan(todayDate),
+      },
+    });
   }
 }

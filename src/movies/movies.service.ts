@@ -4,6 +4,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesRepository } from './movies.repository';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class MoviesService {
@@ -55,5 +56,13 @@ export class MoviesService {
     if (result.affected === 0) {
       throw new NotFoundException();
     }
+  }
+
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron('0 0 * * *', {
+    timeZone: 'Asia/Bangkok',
+  })
+  showingMovie(): Promise<Movie[]> {
+    return this.moviesRepository.getShowingMovie();
   }
 }

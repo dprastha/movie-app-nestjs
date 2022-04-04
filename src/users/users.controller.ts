@@ -7,10 +7,13 @@ import {
   Delete,
   Put,
   ParseIntPipe,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('v1/users')
 export class UsersController {
@@ -22,7 +25,12 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  @UseInterceptors(FileInterceptor('avatar', { dest: './uploads/avatars' }))
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    // console.log(file);
     return this.usersService.create(createUserDto);
   }
 
@@ -32,9 +40,11 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('avatar', { dest: './uploads/avatars' }))
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     return this.usersService.update(id, updateUserDto);
   }

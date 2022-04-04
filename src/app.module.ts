@@ -12,6 +12,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { MovieTagsModule } from './movie_tags/movie_tags.module';
 import { OrdersModule } from './orders/orders.module';
 import { UsersModule } from './users/users.module';
+import { MovieSchedulesModule } from './movie-schedules/movie-schedules.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { UsersModule } from './users/users.module';
     MovieTagsModule,
     OrdersModule,
     UsersModule,
+    MovieSchedulesModule,
   ],
   providers: [
     {

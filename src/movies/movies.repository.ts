@@ -5,10 +5,9 @@ import { Movie } from './entities/movie.entity';
 @EntityRepository(Movie)
 export class MoviesRepository extends Repository<Movie> {
   async getMovies(): Promise<Movie[]> {
-    const query = this.createQueryBuilder('movie').leftJoinAndSelect(
-      'movie.movieTags',
-      'movie_tag',
-    );
+    const query = this.createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.movieTags', 'movie_tag')
+      .leftJoinAndSelect('movie.movieSchedules', 'movie_schedule');
 
     const movies = await query.getMany();
     return movies;

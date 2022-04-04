@@ -5,7 +5,13 @@ import { Studio } from './entities/studio.entity';
 @EntityRepository(Studio)
 export class StudiosRepository extends Repository<Studio> {
   async getStudios(): Promise<Studio[]> {
-    return await this.find();
+    const query = this.createQueryBuilder('studio').leftJoinAndSelect(
+      'studio.movieSchedules',
+      'movie_schedule',
+    );
+
+    const studios = await query.getMany();
+    return studios;
   }
 
   async createStudio(createStudioDto: CreateStudioDto): Promise<Studio> {

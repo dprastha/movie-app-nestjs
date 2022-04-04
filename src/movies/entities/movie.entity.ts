@@ -1,4 +1,5 @@
 import { Expose } from 'class-transformer';
+import { MovieSchedule } from 'src/movie-schedules/entities/movie-schedule.entity';
 import { MovieTag } from 'src/movie_tags/entities/movie_tag.entity';
 import {
   Column,
@@ -37,6 +38,12 @@ export class Movie {
   })
   @Expose({ name: 'movie_tags' })
   movieTags: MovieTag[];
+
+  @OneToMany(() => MovieSchedule, (movieSchedule) => movieSchedule.movie, {
+    onDelete: 'CASCADE',
+  })
+  @Expose({ name: 'movie_schedules' })
+  movieSchedules: MovieSchedule[];
 
   @Expose({ name: 'created_at' })
   @CreateDateColumn({

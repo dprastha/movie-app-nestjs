@@ -4,13 +4,17 @@
   "port": 3306,
   "username": "root",
   "password": "",
-  "database": "movie_app_nestjs_test",
+  "database": "movie_app_nestjs",
   "synchronize": false,
   "logging": true,
   "entities": ["dist/**/*.entity.js"],
   "migrations": ["dist/databases/migrations/*.js"],
+  "seeds": ["dist/databases/seeders/*.js"],
+  "factories": ["dist/databases/factories/*.js"],
   "cli": {
     "entitiesDir": "src/**/entities",
-    "migrationsDir": "src/databases/migrations"
+    "migrationsDir": "src/databases/migrations",
+    "seedDir": "src/databases/migrations",
+    "factoryDir": "src/databases/migrations"
   }
 }

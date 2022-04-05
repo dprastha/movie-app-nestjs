@@ -1,13 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesRepository } from './movies.repository';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class MoviesService {
+  private logger = new Logger('MoviesService', { timestamp: true });
+
   constructor(
     @InjectRepository(MoviesRepository)
     private readonly moviesRepository: MoviesRepository,
@@ -58,11 +60,11 @@ export class MoviesService {
     }
   }
 
-  // @Cron(CronExpression.EVERY_10_SECONDS)
   @Cron('0 0 * * *', {
     timeZone: 'Asia/Bangkok',
   })
-  showingMovie(): Promise<Movie[]> {
-    return this.moviesRepository.getShowingMovie();
+  showingMovies(): Promise<Movie[]> {
+    this.logger.verbose('Cron job for showing movies is running');
+    return this.moviesRepository.getShowingMovies();
   }
 }

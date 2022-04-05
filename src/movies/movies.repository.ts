@@ -27,13 +27,14 @@ export class MoviesRepository extends Repository<Movie> {
     return movie;
   }
 
-  async getShowingMovie(): Promise<Movie[]> {
+  async getShowingMovies(): Promise<Movie[]> {
     const todayDate = new Date().toISOString().slice(0, 10);
+    const query = this.createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.movieTags', 'movie_tag')
+      .leftJoinAndSelect('movie.movieSchedules', 'movie_schedule')
+      .where({ playUntil: MoreThan(todayDate) });
 
-    return this.find({
-      where: {
-        playUntil: MoreThan(todayDate),
-      },
-    });
+    const showingMovies = await query.getMany();
+    return showingMovies;
   }
 }

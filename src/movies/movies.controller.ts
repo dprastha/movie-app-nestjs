@@ -25,6 +25,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}
 
+  @Get('showing-movie')
+  findShowingMovie() {
+    return this.moviesService.showingMovies();
+  }
+
   @Get()
   findAll() {
     return this.moviesService.findAll();
@@ -60,10 +65,5 @@ export class MoviesController {
   @Roles(RoleEnum.Admin)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.moviesService.remove(id);
-  }
-
-  @Get('/showing-movie')
-  findShowingMovie() {
-    return this.moviesService.showingMovie();
   }
 }

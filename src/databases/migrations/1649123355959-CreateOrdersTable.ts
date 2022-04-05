@@ -20,6 +20,11 @@ export class CreateOrdersTable1649123355959 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'total_item_price',
+            type: 'double',
+            isNullable: false,
+          },
+          {
             name: 'payment_method',
             type: 'enum',
             enum: [
@@ -27,13 +32,7 @@ export class CreateOrdersTable1649123355959 implements MigrationInterface {
               PaymentMethodEnum.BANK_TRANSFER,
               PaymentMethodEnum.CREDIT_CARD,
             ],
-            default: PaymentMethodEnum.BANK_TRANSFER,
-          },
-          {
-            name: 'total_item_price',
-            type: 'double',
-            length: '11',
-            isNullable: true,
+            default: PaymentMethodEnum.GOPAY,
           },
           {
             name: 'created_at',
@@ -49,6 +48,15 @@ export class CreateOrdersTable1649123355959 implements MigrationInterface {
             name: 'deleted_at',
             type: 'timestamp',
             isNullable: true,
+          },
+        ],
+        foreignKeys: [
+          {
+            columnNames: ['user_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'users',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
           },
         ],
       }),

@@ -16,6 +16,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.setGlobalPrefix('v1');
   await app.listen(port);
   logger.log(`Application is running on port: ${port}`);
 }

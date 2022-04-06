@@ -17,7 +17,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Controller('v1/order-items')
+@Controller('order-items')
 @UseGuards(AuthGuard(), RolesGuard)
 export class OrderItemsController {
   constructor(private readonly orderItemsService: OrderItemsService) {}

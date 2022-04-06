@@ -20,7 +20,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('v1/movies')
+@Controller('movies')
 @UseGuards(AuthGuard(), RolesGuard)
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}

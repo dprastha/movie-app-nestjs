@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 
-@Controller('v1/movie-tags')
+@Controller('movie-tags')
 @UseGuards(AuthGuard(), RolesGuard)
 export class MovieTagsController {
   constructor(private readonly movieTagsService: MovieTagsService) {}

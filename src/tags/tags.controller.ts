@@ -17,7 +17,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 
-@Controller('v1/tags')
+@Controller('tags')
 @UseGuards(AuthGuard(), RolesGuard)
 export class TagsController {
   constructor(private tagsService: TagsService) {}

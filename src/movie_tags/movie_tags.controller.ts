@@ -16,6 +16,8 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
+import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
+import { MovieTag } from './entities/movie_tag.entity';
 
 @Controller('movie-tags')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -23,33 +25,60 @@ export class MovieTagsController {
   constructor(private readonly movieTagsService: MovieTagsService) {}
 
   @Get()
-  findAll() {
-    return this.movieTagsService.findAll();
+  async findAll(): Promise<IApiResponse<MovieTag[]>> {
+    const movieTags = await this.movieTagsService.findAll();
+
+    return await ApiResponse.success(movieTags, 'Success get all movieTags');
   }
 
   @Post()
   @Roles(RoleEnum.Admin)
-  create(@Body() createMovieTagDto: CreateMovieTagDto) {
-    return this.movieTagsService.create(createMovieTagDto);
+  async create(
+    @Body() createMovieTagDto: CreateMovieTagDto,
+  ): Promise<IApiResponse<MovieTag>> {
+    const createdMovieTag = await this.movieTagsService.create(
+      createMovieTagDto,
+    );
+
+    return await ApiResponse.success(
+      createdMovieTag,
+      'Success create movieTag',
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.movieTagsService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<MovieTag>> {
+    const movieTag = await this.movieTagsService.findOne(id);
+
+    return await ApiResponse.success(movieTag, 'Success get movieTag');
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMovieTagDto: UpdateMovieTagDto,
-  ) {
-    return this.movieTagsService.update(id, updateMovieTagDto);
+  ): Promise<IApiResponse<MovieTag>> {
+    const updatedMovieTag = await this.movieTagsService.update(
+      id,
+      updateMovieTagDto,
+    );
+
+    return await ApiResponse.success(
+      updatedMovieTag,
+      'Success update movieTag',
+    );
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.movieTagsService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<null>> {
+    await this.movieTagsService.remove(id);
+
+    return await ApiResponse.success(null, 'Success remove movieTag');
   }
 }

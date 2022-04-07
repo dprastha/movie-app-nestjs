@@ -19,6 +19,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
+import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -27,40 +29,53 @@ export class UsersController {
 
   @Get()
   @Roles(RoleEnum.Admin)
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(): Promise<IApiResponse<User[]>> {
+    const users = await this.usersService.findAll();
+
+    return await ApiResponse.success(users, 'Success get all users');
   }
 
   @Post()
   @Roles(RoleEnum.Admin)
   @UseInterceptors(FileInterceptor('avatar', { dest: './uploads/avatars' }))
-  create(
+  async create(
     @Body() createUserDto: CreateUserDto,
     @UploadedFile() file: Express.Multer.File,
-  ) {
-    // console.log(file);
-    return this.usersService.create(createUserDto);
+  ): Promise<IApiResponse<User>> {
+    const createdUser = await this.usersService.create(createUserDto);
+
+    return await ApiResponse.success(createdUser, 'Success create user');
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<User>> {
+    const user = await this.usersService.findOne(id);
+
+    return await ApiResponse.success(user, 'Success get user');
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
   @UseInterceptors(FileInterceptor('avatar', { dest: './uploads/avatars' }))
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
     @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.usersService.update(id, updateUserDto);
+  ): Promise<IApiResponse<User>> {
+    const updatedUser = await this.usersService.update(id, updateUserDto);
+
+    return await ApiResponse.success(updatedUser, 'Success update user');
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<null>> {
+    await this.usersService.remove(id);
+
+    return await ApiResponse.success(null, 'Success remove user');
   }
 }

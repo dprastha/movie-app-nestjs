@@ -16,6 +16,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
+import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
+import { Studio } from './entities/studio.entity';
 
 @Controller('studios')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -23,33 +25,49 @@ export class StudiosController {
   constructor(private readonly studiosService: StudiosService) {}
 
   @Get()
-  findAll() {
-    return this.studiosService.findAll();
+  async findAll(): Promise<IApiResponse<Studio[]>> {
+    const studios = await this.studiosService.findAll();
+
+    return await ApiResponse.success(studios, 'Success get all studios');
   }
 
   @Post()
   @Roles(RoleEnum.Admin)
-  create(@Body() createStudioDto: CreateStudioDto) {
-    return this.studiosService.create(createStudioDto);
+  async create(
+    @Body() createStudioDto: CreateStudioDto,
+  ): Promise<IApiResponse<Studio>> {
+    const createdOrder = await this.studiosService.create(createStudioDto);
+
+    return await ApiResponse.success(createdOrder, 'Success create studio');
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.studiosService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<Studio>> {
+    const studio = await this.studiosService.findOne(id);
+
+    return await ApiResponse.success(studio, 'Success get studio');
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateStudioDto: UpdateStudioDto,
-  ) {
-    return this.studiosService.update(id, updateStudioDto);
+  ): Promise<IApiResponse<Studio>> {
+    const updatedStudio = await this.studiosService.update(id, updateStudioDto);
+
+    return await ApiResponse.success(updatedStudio, 'Success update studio');
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.studiosService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<null>> {
+    await this.studiosService.remove(id);
+
+    return await ApiResponse.success(null, 'Success remove studio');
   }
 }

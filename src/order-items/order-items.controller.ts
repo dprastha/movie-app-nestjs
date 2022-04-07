@@ -16,6 +16,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
+import { OrderItem } from './entities/order-item.entity';
 
 @Controller('order-items')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -24,32 +26,59 @@ export class OrderItemsController {
 
   @Get()
   @Roles(RoleEnum.Admin)
-  findAll() {
-    return this.orderItemsService.findAll();
+  async findAll(): Promise<IApiResponse<OrderItem[]>> {
+    const orderItems = await this.orderItemsService.findAll();
+
+    return await ApiResponse.success(orderItems, 'Success get all orderItems');
   }
 
   @Post()
-  create(@Body() createOrderItemDto: CreateOrderItemDto) {
-    return this.orderItemsService.create(createOrderItemDto);
+  async create(
+    @Body() createOrderItemDto: CreateOrderItemDto,
+  ): Promise<IApiResponse<OrderItem>> {
+    const createdOrderItem = await this.orderItemsService.create(
+      createOrderItemDto,
+    );
+
+    return await ApiResponse.success(
+      createdOrderItem,
+      'Success create orderItem',
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.orderItemsService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<OrderItem>> {
+    const orderItem = await this.orderItemsService.findOne(+id);
+
+    return await ApiResponse.success(orderItem, 'Success get orderItem');
   }
 
   @Put(':id')
   @Roles(RoleEnum.Admin)
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOrderItemDto: UpdateOrderItemDto,
-  ) {
-    return this.orderItemsService.update(+id, updateOrderItemDto);
+  ): Promise<IApiResponse<OrderItem>> {
+    const updatedOrderItem = await this.orderItemsService.update(
+      +id,
+      updateOrderItemDto,
+    );
+
+    return await ApiResponse.success(
+      updatedOrderItem,
+      'Success update orderItem',
+    );
   }
 
   @Delete(':id')
   @Roles(RoleEnum.Admin)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.orderItemsService.remove(+id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<IApiResponse<null>> {
+    await this.orderItemsService.remove(+id);
+
+    return await ApiResponse.success(null, 'Success remove orderItem');
   }
 }

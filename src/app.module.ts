@@ -15,6 +15,7 @@ import { UsersModule } from './users/users.module';
 import { MovieSchedulesModule } from './movie-schedules/movie-schedules.module';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import databaseConfig from './config/database.config';
 
 @Module({
   imports: [
@@ -22,20 +23,16 @@ import { ScheduleModule } from '@nestjs/schedule';
     ConfigModule.forRoot({
       envFilePath: [`.env`],
       validationSchema: configValidationSchema,
+      isGlobal: true,
+      load: [databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        autoLoadEntities: true,
-        synchronize: false,
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        const dbConfig = configService.get('database');
+        return dbConfig;
+      },
     }),
     MoviesModule,
     TagsModule,

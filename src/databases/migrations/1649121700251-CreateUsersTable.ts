@@ -40,7 +40,6 @@ export class CreateUsersTable1649121700251 implements MigrationInterface {
             name: 'role',
             type: 'enum',
             enum: [RoleEnum.Admin, RoleEnum.User],
-            default: RoleEnum.User,
           },
           {
             name: 'created_at',

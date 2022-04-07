@@ -18,6 +18,6 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('v1');
   await app.listen(port);
-  logger.log(`Application is running on port: ${port}`);
+  logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

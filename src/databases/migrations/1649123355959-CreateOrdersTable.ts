@@ -32,7 +32,6 @@ export class CreateOrdersTable1649123355959 implements MigrationInterface {
               PaymentMethodEnum.BANK_TRANSFER,
               PaymentMethodEnum.CREDIT_CARD,
             ],
-            default: PaymentMethodEnum.GOPAY,
           },
           {
             name: 'created_at',

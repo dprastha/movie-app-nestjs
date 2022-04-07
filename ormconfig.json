@@ -14,7 +14,7 @@
   "cli": {
     "entitiesDir": "src/**/entities",
     "migrationsDir": "src/databases/migrations",
-    "seedDir": "src/databases/migrations",
-    "factoryDir": "src/databases/migrations"
+    "seedDir": "src/databases/seeders",
+    "factoryDir": "src/databases/factories"
   }
 }

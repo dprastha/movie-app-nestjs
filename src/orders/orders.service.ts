@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailService } from 'src/mail/mail.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -10,14 +11,21 @@ export class OrdersService {
   constructor(
     @InjectRepository(OrdersRepository)
     private readonly ordersRepository: OrdersRepository,
+    private mailService: MailService,
   ) {}
 
   findAll(): Promise<Order[]> {
     return this.ordersRepository.getOrders();
   }
 
-  create(createOrderDto: CreateOrderDto): Promise<Order> {
-    return this.ordersRepository.createOrder(createOrderDto);
+  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    const order = await this.ordersRepository.createOrder(createOrderDto);
+    const orderWithRelation = await this.ordersRepository.findOne(order.id, {
+      relations: ['user', 'orderItems'],
+    });
+    this.mailService.sendTransactionReceipt(orderWithRelation);
+
+    return orderWithRelation;
   }
 
   async findOne(id: number): Promise<Order> {

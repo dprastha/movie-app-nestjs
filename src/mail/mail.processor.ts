@@ -8,7 +8,7 @@ import {
 } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
-import { plainToClass } from 'class-transformer';
+import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 
 @Processor('mail')
@@ -51,7 +51,7 @@ export class MailProcessor {
       const result = await this.mailerService.sendMail({
         template: 'welcome',
         context: {
-          ...plainToClass(User, job.data.user),
+          user: job.data.user,
         },
         subject: `Welcome to Movie App`,
         to: job.data.user.email,
@@ -61,6 +61,33 @@ export class MailProcessor {
     } catch (error) {
       this.logger.error(
         `Failed to send email to '${job.data.user.email}'`,
+        error.stack,
+      );
+
+      throw error;
+    }
+  }
+
+  @Process('send-transaction-receipt')
+  async sendTransactionReceipt(job: Job<{ order: Order }>): Promise<any> {
+    this.logger.log(
+      `Sending transaction receipt to '${job.data.order.user.email}'`,
+    );
+
+    try {
+      const result = await this.mailerService.sendMail({
+        template: 'transaction-receipt',
+        context: {
+          order: job.data.order,
+        },
+        subject: `Transaction Receipt`,
+        to: job.data.order.user.email,
+      });
+
+      return result;
+    } catch (error) {
+      this.logger.error(
+        `Failed to send email to '${job.data.order.user.email}'`,
         error.stack,
       );
 

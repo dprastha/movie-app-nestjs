@@ -21,7 +21,7 @@ import { MailProcessor } from './mail.processor';
           },
         },
         defaults: {
-          from: 'MovieApp',
+          from: configService.get('APP_NAME'),
         },
         template: {
           dir: __dirname + '/templates',

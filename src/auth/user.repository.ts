@@ -9,7 +9,7 @@ import { User } from 'src/users/entities/user.entity';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async createUser(signUpDto: SignUpDto): Promise<void> {
+  async createUser(signUpDto: SignUpDto): Promise<User> {
     const { name, email, password, avatar, role } = signUpDto;
 
     const salt = await bcrypt.genSalt();
@@ -25,6 +25,7 @@ export class UserRepository extends Repository<User> {
 
     try {
       await this.save(user);
+      return user;
     } catch (error) {
       if (error.errno === 1062) {
         // Duplicate Email

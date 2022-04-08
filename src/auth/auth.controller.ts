@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in-dto';
 import { SignUpDto } from './dto/sign-up-dto';
@@ -8,8 +9,10 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  signUp(@Body() signUpDto: SignUpDto): Promise<void> {
-    return this.authService.signUp(signUpDto);
+  async signUp(@Body() signUpDto: SignUpDto): Promise<IApiResponse<null>> {
+    await this.authService.signUp(signUpDto);
+
+    return await ApiResponse.success(null, 'User created successfully');
   }
 
   @Post('/signin')

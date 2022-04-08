@@ -7,7 +7,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filters';
-import databaseConfig from './config/database.config';
 
 async function bootstrap() {
   const logger = new Logger();
@@ -19,7 +18,6 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('v1');
   await app.listen(port);
-  console.log(databaseConfig().username);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

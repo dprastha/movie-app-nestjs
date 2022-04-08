@@ -16,6 +16,8 @@ import { MovieSchedulesModule } from './movie-schedules/movie-schedules.module';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import databaseConfig from './config/database.config';
+import { BullModule } from '@nestjs/bull';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -34,6 +36,16 @@ import databaseConfig from './config/database.config';
         return dbConfig;
       },
     }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('DB_HOST'),
+          port: +configService.get('REDIS_PORT'),
+        },
+      }),
+    }),
     MoviesModule,
     TagsModule,
     StudiosModule,
@@ -43,6 +55,7 @@ import databaseConfig from './config/database.config';
     UsersModule,
     MovieSchedulesModule,
     OrderItemsModule,
+    MailModule,
   ],
   providers: [
     {

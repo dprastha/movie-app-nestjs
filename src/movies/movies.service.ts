@@ -10,7 +10,6 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
 
 @Injectable()
 export class MoviesService {

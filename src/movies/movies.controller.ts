@@ -21,11 +21,7 @@ import { RoleEnum } from 'src/common/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  IApiResponse,
-  ApiResponse,
-  IPaginateApiResponse,
-} from 'src/common/response/api-response';
+import { IApiResponse, ApiResponse } from 'src/common/response/api-response';
 import { Movie } from './entities/movie.entity';
 import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';

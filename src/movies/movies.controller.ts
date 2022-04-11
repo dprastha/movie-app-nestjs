@@ -10,6 +10,8 @@ import {
   ParseIntPipe,
   UseInterceptors,
   UploadedFile,
+  DefaultValuePipe,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -19,7 +21,11 @@ import { RoleEnum } from 'src/common/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { IApiResponse, ApiResponse } from 'src/common/response/api-response';
+import {
+  IApiResponse,
+  ApiResponse,
+  IPaginateApiResponse,
+} from 'src/common/response/api-response';
 import { Movie } from './entities/movie.entity';
 
 @Controller('movies')
@@ -28,8 +34,14 @@ export class MoviesController {
   constructor(private moviesService: MoviesService) {}
 
   @Get('showing-movie')
-  async findShowingMovie(): Promise<IApiResponse<Movie[]>> {
-    const showingMovies = await this.moviesService.showingMovies();
+  async findShowingMovie(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IPaginateApiResponse<Movie>> {
+    const showingMovies = await this.moviesService.showingMovies({
+      page,
+      limit,
+    });
 
     return await ApiResponse.success(
       showingMovies,
@@ -38,8 +50,11 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll(): Promise<IApiResponse<Movie[]>> {
-    const movies = await this.moviesService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IPaginateApiResponse<Movie>> {
+    const movies = await this.moviesService.findAll({ page, limit });
 
     return await ApiResponse.success(movies, 'Success get all movies');
   }

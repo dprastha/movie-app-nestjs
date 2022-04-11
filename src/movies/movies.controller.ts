@@ -27,6 +27,8 @@ import {
   IPaginateApiResponse,
 } from 'src/common/response/api-response';
 import { Movie } from './entities/movie.entity';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
 
 @Controller('movies')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -37,10 +39,18 @@ export class MoviesController {
   async findShowingMovie(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ): Promise<IPaginateApiResponse<Movie>> {
+  ): Promise<IApiResponse<Movie>> {
     const showingMovies = await this.moviesService.showingMovies({
       page,
       limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
     });
 
     return await ApiResponse.success(
@@ -53,8 +63,19 @@ export class MoviesController {
   async findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ): Promise<IPaginateApiResponse<Movie>> {
-    const movies = await this.moviesService.findAll({ page, limit });
+  ): Promise<IApiResponse<Movie>> {
+    const movies = await this.moviesService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(movies, 'Success get all movies');
   }

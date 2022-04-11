@@ -10,6 +10,7 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
 
 @Injectable()
 export class MoviesService {
@@ -23,7 +24,7 @@ export class MoviesService {
   async findAll(options?: IPaginationOptions): Promise<Pagination<Movie>> {
     const movies = await this.moviesRepository.getMovies();
 
-    return paginate(movies, options);
+    return paginate<Movie>(movies, options);
   }
 
   create(createMovieDto: CreateMovieDto): Promise<Movie> {

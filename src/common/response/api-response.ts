@@ -5,11 +5,14 @@ export interface IApiResponse<T> {
   success: boolean;
   status_code: number;
   message: string;
-  data: T;
+  data: T | Pagination<T>;
 }
 
 export class ApiResponse {
-  static async success<T>(data: T, message: string): Promise<IApiResponse<T>> {
+  static async success<T>(
+    data: T | Pagination<T>,
+    message: string,
+  ): Promise<IApiResponse<T>> {
     return {
       success: true,
       status_code: HttpStatus.OK,

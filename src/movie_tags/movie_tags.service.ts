@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { CreateMovieTagDto } from './dto/create-movie_tag.dto';
 import { UpdateMovieTagDto } from './dto/update-movie_tag.dto';
 import { MovieTag } from './entities/movie_tag.entity';
@@ -12,8 +17,10 @@ export class MovieTagsService {
     private movieTagsRepository: MovieTagsRepository,
   ) {}
 
-  findAll(): Promise<MovieTag[]> {
-    return this.movieTagsRepository.getMovieTags();
+  async findAll(options: IPaginationOptions): Promise<Pagination<MovieTag>> {
+    const movieTags = await this.movieTagsRepository.getMovieTags();
+
+    return paginate<MovieTag>(movieTags, options);
   }
 
   create(createMovieTagDto: CreateMovieTagDto) {

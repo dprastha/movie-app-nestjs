@@ -1,17 +1,16 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Tag } from './entities/tag.entity';
 
 @EntityRepository(Tag)
 export class TagsRepository extends Repository<Tag> {
-  async getTags(): Promise<Tag[]> {
-    const query = this.createQueryBuilder('tag').leftJoinAndSelect(
+  async getTags(): Promise<SelectQueryBuilder<Tag>> {
+    const queryBuilder = this.createQueryBuilder('tag').leftJoinAndSelect(
       'tag.movieTags',
       'movie_tag',
     );
 
-    const tags = await query.getMany();
-    return tags;
+    return queryBuilder;
   }
   async createTag(createTagDto: CreateTagDto): Promise<Tag> {
     const { name } = createTagDto;

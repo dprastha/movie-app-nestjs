@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
@@ -9,14 +9,13 @@ import {
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
-  async getusers(): Promise<User[]> {
-    const query = this.createQueryBuilder('user').leftJoinAndSelect(
+  async getusers(): Promise<SelectQueryBuilder<User>> {
+    const queryBuilder = this.createQueryBuilder('user').leftJoinAndSelect(
       'user.orders',
       'order',
     );
 
-    const users = await query.getMany();
-    return users;
+    return queryBuilder;
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {

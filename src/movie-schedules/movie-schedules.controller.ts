@@ -8,6 +8,8 @@ import {
   Put,
   ParseIntPipe,
   UseGuards,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { MovieSchedulesService } from './movie-schedules.service';
 import { CreateMovieScheduleDto } from './dto/create-movie-schedule.dto';
@@ -18,6 +20,8 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { MovieSchedule } from './entities/movie-schedule.entity';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 
 @Controller('movie-schedules')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -26,8 +30,22 @@ export class MovieSchedulesController {
 
   @Get()
   @Roles(RoleEnum.Admin)
-  async findAll(): Promise<IApiResponse<MovieSchedule[]>> {
-    const movieSchedules = await this.movieSchedulesService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IApiResponse<MovieSchedule>> {
+    const movieSchedules = await this.movieSchedulesService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(
       movieSchedules,

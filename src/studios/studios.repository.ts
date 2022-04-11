@@ -1,17 +1,16 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateStudioDto } from './dto/create-studio.dto';
 import { Studio } from './entities/studio.entity';
 
 @EntityRepository(Studio)
 export class StudiosRepository extends Repository<Studio> {
-  async getStudios(): Promise<Studio[]> {
-    const query = this.createQueryBuilder('studio').leftJoinAndSelect(
+  async getStudios(): Promise<SelectQueryBuilder<Studio>> {
+    const queryBuilder = this.createQueryBuilder('studio').leftJoinAndSelect(
       'studio.movieSchedules',
       'movie_schedule',
     );
 
-    const studios = await query.getMany();
-    return studios;
+    return queryBuilder;
   }
 
   async createStudio(createStudioDto: CreateStudioDto): Promise<Studio> {

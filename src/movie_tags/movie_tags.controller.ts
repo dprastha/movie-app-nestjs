@@ -8,6 +8,8 @@ import {
   ParseIntPipe,
   Put,
   UseGuards,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { MovieTagsService } from './movie_tags.service';
 import { CreateMovieTagDto } from './dto/create-movie_tag.dto';
@@ -18,6 +20,8 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { MovieTag } from './entities/movie_tag.entity';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
 
 @Controller('movie-tags')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -25,8 +29,22 @@ export class MovieTagsController {
   constructor(private readonly movieTagsService: MovieTagsService) {}
 
   @Get()
-  async findAll(): Promise<IApiResponse<MovieTag[]>> {
-    const movieTags = await this.movieTagsService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IApiResponse<MovieTag>> {
+    const movieTags = await this.movieTagsService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(movieTags, 'Success get all movieTags');
   }

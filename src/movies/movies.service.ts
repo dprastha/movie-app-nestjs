@@ -5,6 +5,11 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesRepository } from './movies.repository';
 import { Cron } from '@nestjs/schedule';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class MoviesService {
@@ -15,8 +20,10 @@ export class MoviesService {
     private readonly moviesRepository: MoviesRepository,
   ) {}
 
-  findAll(): Promise<Movie[]> {
-    return this.moviesRepository.getMovies();
+  async findAll(options: IPaginationOptions): Promise<Pagination<Movie>> {
+    const movies = await this.moviesRepository.getMovies();
+
+    return paginate<Movie>(movies, options);
   }
 
   create(createMovieDto: CreateMovieDto): Promise<Movie> {
@@ -63,8 +70,12 @@ export class MoviesService {
   @Cron('0 0 * * *', {
     timeZone: 'Asia/Bangkok',
   })
-  showingMovies(): Promise<Movie[]> {
+  async showingMovies(
+    options?: IPaginationOptions,
+  ): Promise<Pagination<Movie>> {
     this.logger.verbose('Cron job for showing movies is running');
-    return this.moviesRepository.getShowingMovies();
+    const showingMovies = await this.moviesRepository.getShowingMovies();
+
+    return paginate(showingMovies, options);
   }
 }

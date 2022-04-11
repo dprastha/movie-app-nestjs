@@ -8,6 +8,8 @@ import {
   Put,
   UseGuards,
   ParseIntPipe,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { StudiosService } from './studios.service';
 import { CreateStudioDto } from './dto/create-studio.dto';
@@ -18,6 +20,8 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { Studio } from './entities/studio.entity';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 
 @Controller('studios')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -25,8 +29,22 @@ export class StudiosController {
   constructor(private readonly studiosService: StudiosService) {}
 
   @Get()
-  async findAll(): Promise<IApiResponse<Studio[]>> {
-    const studios = await this.studiosService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IApiResponse<Studio>> {
+    const studios = await this.studiosService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(studios, 'Success get all studios');
   }

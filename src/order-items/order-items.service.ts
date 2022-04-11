@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { UpdateOrderItemDto } from './dto/update-order-item.dto';
 import { OrderItem } from './entities/order-item.entity';
@@ -12,8 +17,10 @@ export class OrderItemsService {
     private readonly orderItemsRepository: OrderItemsRepository,
   ) {}
 
-  findAll(): Promise<OrderItem[]> {
-    return this.orderItemsRepository.getOrderItems();
+  async findAll(options: IPaginationOptions): Promise<Pagination<OrderItem>> {
+    const orderItems = await this.orderItemsRepository.getOrderItems();
+
+    return paginate<OrderItem>(orderItems, options);
   }
 
   create(createOrderItemDto: CreateOrderItemDto): Promise<OrderItem> {

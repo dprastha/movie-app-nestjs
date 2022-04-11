@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { CreateMovieScheduleDto } from './dto/create-movie-schedule.dto';
 import { UpdateMovieScheduleDto } from './dto/update-movie-schedule.dto';
 import { MovieSchedule } from './entities/movie-schedule.entity';
@@ -12,8 +17,13 @@ export class MovieSchedulesService {
     private movieSchedulesRepository: MovieSchedulesRepository,
   ) {}
 
-  findAll(): Promise<MovieSchedule[]> {
-    return this.movieSchedulesRepository.getMovieSchedules();
+  async findAll(
+    options: IPaginationOptions,
+  ): Promise<Pagination<MovieSchedule>> {
+    const movieSchedules =
+      await this.movieSchedulesRepository.getMovieSchedules();
+
+    return paginate<MovieSchedule>(movieSchedules, options);
   }
 
   create(

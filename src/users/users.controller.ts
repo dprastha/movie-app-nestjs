@@ -10,6 +10,8 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,6 +23,8 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { User } from './entities/user.entity';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 
 @Controller('users')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -29,8 +33,22 @@ export class UsersController {
 
   @Get()
   @Roles(RoleEnum.Admin)
-  async findAll(): Promise<IApiResponse<User[]>> {
-    const users = await this.usersService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IApiResponse<User>> {
+    const users = await this.usersService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(users, 'Success get all users');
   }

@@ -20,7 +20,7 @@ export class MoviesService {
     private readonly moviesRepository: MoviesRepository,
   ) {}
 
-  async findAll(options?: IPaginationOptions): Promise<Pagination<Movie>> {
+  async findAll(options: IPaginationOptions): Promise<Pagination<Movie>> {
     const movies = await this.moviesRepository.getMovies();
 
     return paginate<Movie>(movies, options);
@@ -29,17 +29,6 @@ export class MoviesService {
   create(createMovieDto: CreateMovieDto): Promise<Movie> {
     return this.moviesRepository.createMovie(createMovieDto);
   }
-
-  // async findOne(
-  //   id: number,
-  //   options?: IPaginationOptions,
-  // ): Promise<Pagination<Movie>> {
-  //   const queryBuilder = this.moviesRepository
-  //     .createQueryBuilder('movie')
-  //     .where({ id });
-
-  //   return paginate(queryBuilder, options);
-  // }
 
   async findOne(id: number): Promise<Movie> {
     const found = await this.moviesRepository.findOne(id, {

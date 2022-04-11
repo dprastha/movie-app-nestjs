@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { Tag } from './entities/tag.entity';
@@ -11,8 +16,10 @@ export class TagsService {
     @InjectRepository(TagsRepository)
     private readonly tagRepository: TagsRepository,
   ) {}
-  findAll(): Promise<Tag[]> {
-    return this.tagRepository.getTags();
+  async findAll(options: IPaginationOptions): Promise<Pagination<Tag>> {
+    const tags = await this.tagRepository.getTags();
+
+    return paginate<Tag>(tags, options);
   }
 
   create(createTagDto: CreateTagDto): Promise<Tag> {

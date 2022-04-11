@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { CreateStudioDto } from './dto/create-studio.dto';
 import { UpdateStudioDto } from './dto/update-studio.dto';
 import { Studio } from './entities/studio.entity';
@@ -12,8 +17,10 @@ export class StudiosService {
     private studiosRepository: StudiosRepository,
   ) {}
 
-  findAll(): Promise<Studio[]> {
-    return this.studiosRepository.getStudios();
+  async findAll(options: IPaginationOptions): Promise<Pagination<Studio>> {
+    const studios = await this.studiosRepository.getStudios();
+
+    return paginate<Studio>(studios, options);
   }
 
   create(createStudioDto: CreateStudioDto): Promise<Studio> {

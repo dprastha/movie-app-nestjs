@@ -1,16 +1,15 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { OrderItem } from './entities/order-item.entity';
 
 @EntityRepository(OrderItem)
 export class OrderItemsRepository extends Repository<OrderItem> {
-  async getOrderItems(): Promise<OrderItem[]> {
-    const query = this.createQueryBuilder('orderItem')
+  async getOrderItems(): Promise<SelectQueryBuilder<OrderItem>> {
+    const queryBuilder = this.createQueryBuilder('orderItem')
       .leftJoinAndSelect('orderItem.order', 'order')
       .leftJoinAndSelect('orderItem.movieSchedule', 'movieSchedule');
 
-    const orderItems = await query.getMany();
-    return orderItems;
+    return queryBuilder;
   }
 
   async createOrderItem(

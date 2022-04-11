@@ -8,6 +8,8 @@ import {
   Put,
   UseGuards,
   ParseIntPipe,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { CreateTagDto } from './dto/create-tag.dto';
@@ -18,14 +20,30 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/common/enums/role.enum';
 import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { Tag } from './entities/tag.entity';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
 
 @Controller('tags')
 @UseGuards(AuthGuard(), RolesGuard)
 export class TagsController {
   constructor(private tagsService: TagsService) {}
   @Get()
-  async findAll(): Promise<IApiResponse<Tag[]>> {
-    const tags = await this.tagsService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IApiResponse<Tag>> {
+    const tags = await this.tagsService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(tags, 'Success get all tags');
   }

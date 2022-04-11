@@ -8,6 +8,8 @@ import {
   ParseIntPipe,
   Put,
   UseGuards,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -18,6 +20,8 @@ import { RoleEnum } from 'src/common/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ApiResponse, IApiResponse } from 'src/common/response/api-response';
 import { Order } from './entities/order.entity';
+import { IPaginationMeta } from 'nestjs-typeorm-paginate';
+import { CustomPaginationMeta } from 'src/common/response/custom-pagination-meta';
 
 @Controller('orders')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -25,8 +29,22 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
   @Get()
   @Roles(RoleEnum.Admin)
-  async findAll(): Promise<IApiResponse<Order[]>> {
-    const orders = await this.ordersService.findAll();
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<IApiResponse<Order>> {
+    const orders = await this.ordersService.findAll({
+      page,
+      limit,
+      metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+        new CustomPaginationMeta(
+          meta.itemCount,
+          meta.totalItems,
+          meta.itemsPerPage,
+          meta.totalPages,
+          meta.currentPage,
+        ),
+    });
 
     return await ApiResponse.success(orders, 'Success get all orders');
   }
